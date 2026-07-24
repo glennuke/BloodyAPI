@@ -1,7 +1,5 @@
-﻿using BCrypt.Net;
-using BloodyAPI.Data;
+﻿using BloodyAPI.Data;
 using BloodyAPI.Models;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -72,13 +70,6 @@ namespace BloodyAPI.Controllers
             if (!valid)
                 return Unauthorized("Invalid username or password");
 
-            if (!user.IsSubscribed)
-            {
-                return Unauthorized("No active subscription");
-            }
-
-
-
             return Ok(new
             {
                 message = "Login successful",
@@ -86,6 +77,29 @@ namespace BloodyAPI.Controllers
                 id = user.Id
             });
         }
+
+        [HttpPost("checksubscribed")]
+        public async Task<IActionResult> CheckSubscribed(CheckSubscribedRequest request)
+        {
+            var user = await db.Users
+                .FirstOrDefaultAsync(x =>
+                    x.Id == request.UserID);
+
+
+            if (user == null)
+                return Unauthorized("Invalid UserID");
+
+            return Ok(new
+            {
+                subscribed = user.IsSubscribed,
+                id = user.Id
+            });
+        }
+    }
+
+    public class CheckSubscribedRequest
+    {
+        public int UserID { get; set; } = 0;
     }
 
     public class RegisterRequest
