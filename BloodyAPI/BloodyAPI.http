@@ -1,0 +1,6 @@
+@BloodyAPI_HostAddress = http://localhost:5156
+
+GET {{BloodyAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
