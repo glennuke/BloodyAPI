@@ -79,11 +79,11 @@ namespace BloodyAPI.Controllers
         }
 
         [HttpPost("checksubscribed")]
-        public async Task<IActionResult> CheckSubscribed(int UserID)
+        public async Task<IActionResult> CheckSubscribed(CheckSubscribedRequest request)
         {
             var user = await db.Users
                 .FirstOrDefaultAsync(x =>
-                    x.Id == UserID);
+                    x.Id == request.UserID);
 
 
             if (user == null)
@@ -95,6 +95,11 @@ namespace BloodyAPI.Controllers
                 id = user.Id
             });
         }
+    }
+
+    public class CheckSubscribedRequest
+    {
+        public int UserID { get; set; } = 0;
     }
 
     public class RegisterRequest
